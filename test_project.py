@@ -1,3 +1,4 @@
+from cgi import test
 from project import get_user_tz
 from _pytest.monkeypatch import MonkeyPatch
 from pytest import raises
@@ -18,5 +19,3 @@ class TestFunctions():
             self.monkeypatch.setattr("builtins.input", lambda _: "Invalid Input")
             # Enters loop
             get_user_tz()
-
-            
