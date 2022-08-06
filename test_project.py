@@ -1,4 +1,4 @@
-from project import get_user_tz, get_user_task
+from project import get_user_tz
 from _pytest.monkeypatch import MonkeyPatch
 from pytest import raises
 
