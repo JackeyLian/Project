@@ -95,16 +95,20 @@ def get_user_tz():
         elif max_attempts == 3:
             exit("Invalid Usage")
         else:
-            max_attempts += 1 
+            max_attempts -= 1 
 
  
  
 def get_user_task():
+    max_attempts = 3
     while True:
         task = input("Task: ")
         if task:
             return task
+        elif max_attempts == 3:
+            exit("Invalid Usage")
         else:
+            max_attempts += 1
             print("Please input a task")
             time.sleep(2)
  
