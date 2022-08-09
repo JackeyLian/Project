@@ -1,6 +1,6 @@
 import sqlite3
-import pytz
 import time
+from pytz import common_timezones
 from sys import exit
 from re import search 
 from tabulate import tabulate
@@ -50,7 +50,9 @@ class CompleteTask():
  
 def main():
     while True:
-        to_do_list = create_to_do_list()
+        task = get_user_task()
+        timezone = get_user_tz()
+        to_do_list = create_to_do_list(timezone, task)
         print(tabulate(to_do_list, headers=["Tasks", "Time Added"], tablefmt="github"))
         user_input = input("(C) Complete Task\n(C) Input: ")
         if user_input == "C":
@@ -70,20 +72,13 @@ def main():
         else: 
             print("Please input a valid task")
             time.sleep(2)
- 
+  
 
-def create_to_do_list():
-    user_dt = get_user_tz()
-    task = get_user_task()
-    to_do_list = create_db(task, user_dt)
-    return to_do_list
- 
- 
 def get_user_tz():
     max_attempts = 3
     while True:
         user_input = input("What is your timezone?\nH for help\nInput: ").strip()
-        if user_input in pytz.common_timezones:
+        if user_input in common_timezones:
             utc_dt = datetime.now()
             user_dt = pytz.timezone(user_input)
             fmt = '%Y-%m-%d %H:%M:%S %Z'
@@ -95,26 +90,29 @@ def get_user_tz():
         elif max_attempts == 3:
             exit("Invalid Usage")
         else:
-            max_attempts -= 1 
+            max_attempts += 1 
 
  
  
 def get_user_task():
-    max_attempts = 3
     while True:
         task = input("Task: ")
         if task:
             return task
-        elif max_attempts == 3:
-            exit("Invalid Usage")
         else:
-            max_attempts += 1
             print("Please input a task")
             time.sleep(2)
+
+
+def create_to_do_list(task, timezone):
+    task_data = create_db(task, timezone)
+    # Returns data from Database to be printed in tabulate
+    return task_data
  
- 
-def create_db(task, user_dt):
+def create_db(task, timezone):
+    # Creates the Database for the To-do-list
     db = DataBase(task, user_dt)
+    # Gets data from Sqlite3 for tabulate print out on CLI
     data = db.get_data()
     return data
  

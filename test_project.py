@@ -19,17 +19,7 @@ class TestFunctions():
             # Enters loop
             get_user_tz()
 
-    def test_get_user_task(self):
-        self.monkeypatch.setattr("builtins.input", lambda _: "Physical Activity")
-        output = get_user_task()
-        assert output == "Physical Activity"
+    def test_create_to_do_list(self):
+        create_to_do_list()
 
-    def test_invalid_user_task(self):
-        with raises(SystemExit):
-            # Inputs nothing
-            self.monkeypatch.setattr("builtins.input", lambda _: "")
-            # Similiar with testing tz. Runs loop until max attempts are reached
-            get_user_task()
-
-
-
+    
